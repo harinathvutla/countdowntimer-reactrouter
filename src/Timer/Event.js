@@ -129,7 +129,7 @@ class Event extends Component {
                 </form>
                 <div className='cntdwn-center'>
                 <div className="cntdwn">
-        <h4>{this.state?.eventname??''} {this.state?.dateCDNSet??''} {this.state?.timeCDNSet??''}</h4>
+                    <h4>{this.state?.eventname??''} {this.state?.dateCDNSet??''} {this.state?.timeCDNSet??''}</h4>
                     <div>
                         <h3>Days</h3>
                         <p>{this.state?.cdnDays??'00'}</p>
