@@ -65,20 +65,27 @@ label{
   .button:hover{
   background-color: #14899b; 
  } 
- 
- .cntdwn-center{
+  
+ .cntdwn-wrapper{
+   margin: 50px auto;
    display: flex;
+   flex-direction: column;
    justify-content: center;
+   border: solid #17a2b8 2px;
+   border-radius: 10px;
+   width: 40vw;
+   align-content: center;
+ }
+
+ .cntdwn-wrapper h4{
+  margin-top: 10px;
+  margin-bottom: 0px;
  }
 
 .cntdwn{
-  margin: 50px;
-  width: 40vw;
   display: flex;
   justify-content: space-evenly;
-  padding: 20px;
-  border: solid #17a2b8 2px;
-  border-radius: 10px;
+  padding: 10px 20px 20px;
 }
 
 .cntdwn p{

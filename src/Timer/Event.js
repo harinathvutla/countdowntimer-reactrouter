@@ -127,9 +127,9 @@ class Event extends Component {
                     <h4 style={{color:'red'}}>{this.state?.warnMessage??''}</h4>
                     <input type="submit" value="Start" className="button"/>
                 </form>
-                <div className='cntdwn-center'>
+                <div className='cntdwn-wrapper'>
+                <h4>{this.state?.eventname??''}&nbsp;&nbsp; {this.state?.dateCDNSet??''}&nbsp;&nbsp; {this.state?.timeCDNSet??''}</h4>
                 <div className="cntdwn">
-                    <h4>{this.state?.eventname??''} {this.state?.dateCDNSet??''} {this.state?.timeCDNSet??''}</h4>
                     <div>
                         <h3>Days</h3>
                         <p>{this.state?.cdnDays??'00'}</p>
