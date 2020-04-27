@@ -33,8 +33,9 @@ class Event extends Component {
     // count down timer logic
        countDown=(countDownDate, eName)=>{
        
+        console.log("eName:",eName);
         let timediff= countDownDate-this.state.datetime.getTime();
-        console.log(countDownDate,this.state.datetime.getTime(),timediff);
+       // console.log(countDownDate,this.state.datetime.getTime(),timediff);
         // Count down time calculations for days, hours, minutes and seconds
         if(timediff>=0)
         {
@@ -43,7 +44,7 @@ class Event extends Component {
             let cdnMinutes = Math.floor((timediff % (1000 * 60 * 60)) / (1000 * 60));
             let cdnSeconds = Math.floor((timediff % (1000 * 60)) / 1000);
 
-            console.log(cdnDays,cdnHours,cdnMinutes,cdnSeconds);
+       //     console.log(cdnDays,cdnHours,cdnMinutes,cdnSeconds);
             this.setState(prevState =>
                 ({
                 cdnTime: {...prevState.cdnTime,[eName]:{
@@ -76,16 +77,16 @@ class Event extends Component {
         {
             if(this.state.eventname!=='')
             {
-                this.cdnTimer=setInterval(()=>this.countDown(countDownDate,this.state.eventname),1000);
+                let temp=this.state.eventname;
+                this.cdnTimer=setInterval(()=>this.countDown(countDownDate,temp),1000);
                 this.setState({
-                    warnMessage: ''
+                    warnMessage: '',
+                    events: [...this.state.events, {eventName: this.state.eventname, date :this.state.dateCDNSet,time:this.state?.timeCDNSet??'00'}],
+                     eventname: '',
+                    dateCDNSet: '',
+                    timeCDNSet: ''  
                   });
 
-                  this.setState(
-                      {
-                        events: [...this.state.events, {eventName: this.state.eventname, date :this.state.dateCDNSet,time:this.state.timeCDNSet}]
-                      }
-                  );
             }
             else
             {
@@ -122,54 +123,10 @@ class Event extends Component {
     }
 
 
-/*     eventsDisplay=()=>{
-        this.state.events.map(x=>{
-            console.log(x);
+    eventsDisplay=()=>{
+      return  this.state.events.map(x=>{
            return( 
-           <div className='cntdwn-wrapper'>
-                <h4>{x?.eventName??''}&nbsp;&nbsp; {x?.date??''}&nbsp;&nbsp; {x?.time??''}</h4>
-                <div className="cntdwn">
-                    <div>
-                        <h3>Days</h3>
-                        <p>{this.state?.cdnDays??'00'}</p>
-                    </div>
-                    <div>
-                        <h3>Hours</h3>
-                        <p>{this.state?.cdnHours??'00'}</p>
-                    </div>
-                    <div>
-                        <h3>Minutes</h3>
-                        <p>{this.state?.cdnMinutes??'00'}</p>
-                    </div> 
-                    <div>
-                        <h3>Seconds</h3>
-                        <p>{this.state?.cdnSeconds??'00'}</p>
-                    </div>                    
-                </div>
-            </div>);
-        })
-    } */
-
-    render() {
-        console.log(this.state);
-       // console.log(this.state.datetime.toLocaleTimeString());
-        return (
-            <div>
-                <h2>Today:   {this.state.datetime.toLocaleDateString()} &nbsp;&nbsp;  {this.state.datetime.toLocaleTimeString()}</h2>
-                <form onSubmit={this.formSubmitHandler}>
-                    <div>
-                    <label>Event name: <input className="inputs" type="text" name="eventname" value ={this.state?.eventname??''} onChange={this.handleChange}></input></label>
-                    <label>Date: <input className="inputs" type="date" name="dateCDNSet" value ={this.state?.dateCDNSet??''} onChange={this.handleChange}></input> </label>
-                    <label>Time: <input className="inputs" type="time" name="timeCDNSet" value ={this.state?.timeCDNSet??''} onChange={this.handleChange}></input> </label>
-                    </div>
-                    <h4 style={{color:'red'}}>{this.state?.warnMessage??''}</h4>
-                    <input type="submit" value="Start" className="button"/>
-                </form>
-               {/*  {this.eventsDisplay()} */}
-              { this.state.events.map(x=>{
-           
-                return( 
-                <div className='cntdwn-wrapper' key='x'>
+                <div className='cntdwn-wrapper' key={x.eventName}>
                     <h4>{x?.eventName??''}&nbsp;&nbsp; {x?.date??''}&nbsp;&nbsp; {x?.time??''}</h4>
                     <div className="cntdwn">
                         <div>
@@ -190,8 +147,25 @@ class Event extends Component {
                         </div>                    
                     </div>
                 </div>);
-            })
-         }
+        })
+    } 
+
+    render() {
+     //   console.log(this.state);
+       // console.log(this.state.datetime.toLocaleTimeString());
+        return (
+            <div>
+                <h2>Today:   {this.state.datetime.toLocaleDateString()} &nbsp;&nbsp;  {this.state.datetime.toLocaleTimeString()}</h2>
+                <form onSubmit={this.formSubmitHandler}>
+                    <div>
+                    <label>Event name: <input className="inputs" type="text" name="eventname" value ={this.state?.eventname??''} onChange={this.handleChange} ></input></label>
+                    <label>Date: <input className="inputs" type="date" name="dateCDNSet" value ={this.state?.dateCDNSet??''} onChange={this.handleChange} ></input> </label>
+                    <label>Time: <input className="inputs" type="time" name="timeCDNSet" value ={this.state?.timeCDNSet??''} onChange={this.handleChange}></input> </label>
+                    </div>
+                    <h4 style={{color:'red'}}>{this.state?.warnMessage??''}</h4>
+                    <input type="submit" value="Start" className="button"/>
+                </form>
+                 {this.eventsDisplay()} 
             </div>
         );
     }
