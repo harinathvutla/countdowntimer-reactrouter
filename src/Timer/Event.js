@@ -57,7 +57,7 @@ class Event extends Component {
                 }));
         }
         else{
-            clearInterval(this.cdnTimer);
+            clearInterval(this.state.events.filter(x=>x.eventName===eName).cdnTimerID);
         }
     } 
 
@@ -78,10 +78,10 @@ class Event extends Component {
             if(this.state.eventname!=='')
             {
                 let temp=this.state.eventname;
-                this.cdnTimer=setInterval(()=>this.countDown(countDownDate,temp),1000);
+                let cdnTimerID=setInterval(()=>this.countDown(countDownDate,temp),1000);
                 this.setState({
                     warnMessage: '',
-                    events: [...this.state.events, {eventName: this.state.eventname, date :this.state.dateCDNSet,time:this.state?.timeCDNSet??'00'}],
+                    events: [...this.state.events, {eventName: this.state.eventname, date :this.state.dateCDNSet,time:this.state?.timeCDNSet??'00', cdnTimerID}],
                      eventname: '',
                     dateCDNSet: '',
                     timeCDNSet: ''  
@@ -116,7 +116,6 @@ class Event extends Component {
     }
 
     handleChange=e=>{
-       // console.log(e.target, e.target.value);
          this.setState({
             [e.target.name]: e.target.value
           }); 
