@@ -97,6 +97,16 @@ class Event extends Component {
             }
 
         }
+        else{
+
+            this.setState(prevState =>
+                ({
+                cdnTime: {...prevState.cdnTime,[event.eventName]:{
+                    timediff: -1
+                    } }
+                }));
+
+        }
      
     }
 
