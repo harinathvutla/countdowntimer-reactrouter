@@ -14,6 +14,15 @@ class Event extends Component {
     // Today Date and Time display logic
     componentDidMount=()=>{
         this.timerID= setInterval(()=>this.setTime(),1000);
+        this.setState({
+            events: JSON.parse(localStorage.getItem('events'))??[]
+          },()=>{
+              for(let i=0;i < this.state.events.length;i++)
+              {
+                  console.log("le:",this.state.events[i]);
+                this.storedEventsDisplay(this.state.events[i],i);
+              }
+          } );
     }
 
     setTime=()=> {
@@ -52,16 +61,46 @@ class Event extends Component {
                     cdnHours: cdnHours,
                     cdnMinutes: cdnMinutes,
                     cdnSeconds: cdnSeconds,
-                    timediff: timediff
                     } }
                 }));
         }
         else{
-            clearInterval(this.state.events.filter(x=>x.eventName===eName).cdnTimerID);
+            clearInterval(this.state.events.filter(x=>x.eventName===eName)[0].cdnTimerID);
+            this.setState(prevState =>
+                ({
+                cdnTime: {...prevState.cdnTime,[eName]:{
+                    ...prevState.cdnTime[eName],timediff: timediff
+                    } }
+                }));
         }
     } 
 
+    storedEventsDisplay=(event,i)=>{
+        console.log("sev:",event);
+        let year= parseInt(event.date.split('-')[0]);
+        let month= parseInt(event.date.split('-')[1]);
+        let day= parseInt(event.date.split('-')[2]);
+        let hours= parseInt((event.time!=='')?event.time.split(':')[0]:'0');
+        let mins=parseInt((event.time!=='')?event.time.split(':')[1]:'0');
 
+        console.log(year,month,day,hours,mins);
+        let countDownDate=new Date(year,month-1,day,hours,mins,0).getTime();
+        if((countDownDate-this.state.datetime.getTime())>=0)
+        {
+            if(event.eventName!=='')
+            {
+                let cdnTimerID=setInterval(()=>this.countDown(countDownDate,event.eventName),200);
+
+                this.setState(prevState=>({
+                    events: [...prevState.events, {...prevState.events[i], cdnTimerID}]
+                  },()=> console.log(this.state.events)));    
+            }
+
+        }
+     
+    }
+
+  // handle submit
     formSubmitHandler=e=>{
         e.preventDefault();
  
@@ -78,15 +117,16 @@ class Event extends Component {
             if(this.state.eventname!=='')
             {
                 let temp=this.state.eventname;
-                let cdnTimerID=setInterval(()=>this.countDown(countDownDate,temp),1000);
+                let cdnTimerID=setInterval(()=>this.countDown(countDownDate,temp),200);
+
                 this.setState({
                     warnMessage: '',
-                    events: [...this.state.events, {eventName: this.state.eventname, date :this.state.dateCDNSet,time:this.state?.timeCDNSet??'00', cdnTimerID}],
+                    events: [...this.state?.events, {eventName: this.state.eventname, date :this.state.dateCDNSet,time:this.state?.timeCDNSet??'00', cdnTimerID}],
                      eventname: '',
                     dateCDNSet: '',
                     timeCDNSet: ''  
-                  });
-
+                  }, ()=>localStorage.setItem('events',JSON.stringify(this.state.events)));
+               
             }
             else
             {
@@ -123,7 +163,7 @@ class Event extends Component {
 
 
     eventsDisplay=()=>{
-      return  this.state.events.map(x=>{
+      return  this.state?.events?.map(x=>{
            return( 
                 <div className='cntdwn-wrapper' key={x.eventName}>
                     <h4>{x?.eventName??''}&nbsp;&nbsp; {x?.date??''}&nbsp;&nbsp; {x?.time??''}</h4>
@@ -145,9 +185,11 @@ class Event extends Component {
                             <p>{this.state?.cdnTime[x.eventName]?.cdnSeconds??'00'}</p>
                         </div>                    
                     </div>
+                    <p className='timer-expired'>{this.state?.cdnTime[x.eventName]?.timediff<0?'Timer Expired':''}</p>
                 </div>);
         })
     } 
+
 
     render() {
      //   console.log(this.state);

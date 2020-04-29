@@ -85,7 +85,7 @@ label{
 .cntdwn{
   display: flex;
   justify-content: space-evenly;
-  padding: 10px 20px 20px;
+  padding: 10px 0px 20px;
 }
 
 .cntdwn p{
@@ -93,3 +93,10 @@ label{
   font-size: 50px;
 }
 
+.timer-expired{
+  margin: 0px;
+  color: red;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
