@@ -42,7 +42,7 @@ class Event extends Component {
     // count down timer logic
        countDown=(countDownDate, eName)=>{
        
-        console.log("eName:",eName);
+       // console.log("eName:",eName);
         let timediff= countDownDate-this.state.datetime.getTime();
        // console.log(countDownDate,this.state.datetime.getTime(),timediff);
         // Count down time calculations for days, hours, minutes and seconds
@@ -83,17 +83,38 @@ class Event extends Component {
         let hours= parseInt((event.time!=='')?event.time.split(':')[0]:'0');
         let mins=parseInt((event.time!=='')?event.time.split(':')[1]:'0');
 
-        console.log(year,month,day,hours,mins);
+      //  console.log(year,month,day,hours,mins);
         let countDownDate=new Date(year,month-1,day,hours,mins,0).getTime();
         if((countDownDate-this.state.datetime.getTime())>=0)
         {
             if(event.eventName!=='')
             {
                 let cdnTimerID=setInterval(()=>this.countDown(countDownDate,event.eventName),200);
+                console.log(event.eventName,cdnTimerID);
 
-                this.setState(prevState=>({
-                    events: [...prevState.events, {...prevState.events[i], cdnTimerID}]
-                  },()=> console.log(this.state.events)));    
+     /*            this.setState(prevState=>
+                    ({
+                    events:  prevState.events.map((obj,index)=>{
+                        console.log((index===i)? {...obj,cdnTimerID:cdnTimerID}:obj);
+                   return  (index===i)? {...obj,cdnTimerID:cdnTimerID}:obj}
+                   )                  
+                  }));  */  
+                  
+                  
+                  this.setState(
+                    {
+                    events:  this.state.events.map((obj,index)=>{
+                        if(index===i)
+                        console.log({...obj,cdnTimerID:cdnTimerID});
+                   return  (index===i)? {...obj,cdnTimerID:cdnTimerID}:obj}
+                   )                  
+                  });
+
+                  
+/*                   this.setState(
+                    {
+                    events:  [...this.state.events, {...this.state.events[i], cdnTimerID:cdnTimerID}]
+                  });  */
             }
 
         }
