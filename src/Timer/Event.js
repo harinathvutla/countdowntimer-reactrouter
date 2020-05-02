@@ -8,7 +8,7 @@ class Event extends Component {
         dateCDNSet: '',
         timeCDNSet: '' ,
         events: [],
-        cdnTime: []
+        cdnTime: {}
     }
 
     // Today Date and Time display logic
@@ -110,11 +110,7 @@ class Event extends Component {
                    )                  
                   });
 
-                  
-/*                   this.setState(
-                    {
-                    events:  [...this.state.events, {...this.state.events[i], cdnTimerID:cdnTimerID}]
-                  });  */
+                
             }
 
         }
@@ -197,7 +193,7 @@ class Event extends Component {
       return  this.state?.events?.map(x=>{
            return( 
                 <div className='cntdwn-wrapper' key={x.eventName}>
-                    <h4>{x?.eventName??''}&nbsp;&nbsp; {x?.date??''}&nbsp;&nbsp; {x?.time??''}</h4>
+                    <h4>{x?.eventName??''}&nbsp;&nbsp; {x?.date??''}&nbsp;&nbsp; {x?.time===''?'00:00':x.time}</h4>
                     <div className="cntdwn">
                         <div>
                             <h3>Days</h3>
