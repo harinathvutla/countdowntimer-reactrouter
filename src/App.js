@@ -1,19 +1,12 @@
 import React from 'react';
 import './App.css';
 import Event from "./Timer/Event"
-/* import Clock from "./Timer/Clock" */
-
+import Headline from "./Timer/Headline"
 function App() {
   return (
     <div className="App">
-      <div className="heading">
-        <h1>Countdown&nbsp;&nbsp;</h1>
-        <h1 className="t-rotate">T</h1>
-        <h1>&nbsp;imer</h1>
-    </div>
-      
+        <Headline/>
          <Event/> 
-       {/*  <Clock></Clock> */}
     </div>
   );
 }

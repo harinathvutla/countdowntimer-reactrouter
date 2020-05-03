@@ -1,43 +1,55 @@
 import React, { Component } from 'react';
+import Clock from "./Clock"; 
 
 class Event extends Component {
     state={
-        datetime: new Date(),
-        monthDays:[{'1': 31},{'2': 28},{'3': 31},{'4': 30},{'5': 31},{'6': 30},{'7': 31},{'8': 31},{'9': 30},{'10': 31},{'11': 30},{'12': 31}],
+  
         eventname: '',
         dateCDNSet: '',
         timeCDNSet: '' ,
         events: [],
-        cdnTime: {}
+        cdnTime: {},
+        flagStoredEventsDisplay: 0
     }
 
     // Today Date and Time display logic
     componentDidMount=()=>{
-        this.timerID= setInterval(()=>this.setTime(),1000);
+        
         this.setState({
             events: JSON.parse(localStorage.getItem('events'))??[]
           },()=>{
-              for(let i=0;i < this.state.events.length;i++)
-              {
-                  console.log("le:",this.state.events[i]);
-                this.storedEventsDisplay(this.state.events[i],i);
-              }
+             if(this.state?.datetime?.getTime()!==undefined){
+                this.loadEvents();
+            } 
           } );
     }
 
-    setTime=()=> {
+    datetime=(dt)=>{
         this.setState({
-         datetime: new Date() ,
-          h : this.state.datetime.getHours(),
-         m : this.state.datetime.getMinutes(),
-         s : this.state.datetime.getSeconds()   
-       });
-     }
+            datetime:dt
+        })
+    }
 
-    componentWillUnmount() {
-        clearInterval(this.timerID);
-      }
+    loadEvents=()=>{
+        for(let i=0;i < this.state.events.length;i++)
+        {
+            console.log("le:",this.state.events[i]);
+          this.storedEventsDisplay(this.state.events[i],i);
+        }
+    }
 
+    componentDidUpdate=()=>{
+       
+        if(this.state?.datetime!==undefined && this.state.flagStoredEventsDisplay===0)
+        {
+            this.setState({
+                flagStoredEventsDisplay:1
+            });
+
+            this.loadEvents();
+        }
+
+    } 
 
     // count down timer logic
        countDown=(countDownDate, eName)=>{
@@ -85,22 +97,14 @@ class Event extends Component {
 
       //  console.log(year,month,day,hours,mins);
         let countDownDate=new Date(year,month-1,day,hours,mins,0).getTime();
-        if((countDownDate-this.state.datetime.getTime())>=0)
+        console.log(countDownDate,this.state?.datetime?.getTime(),this.state?.datetime);
+        if((countDownDate-this.state?.datetime?.getTime())>=0)
         {
             if(event.eventName!=='')
             {
                 let cdnTimerID=setInterval(()=>this.countDown(countDownDate,event.eventName),200);
                 console.log(event.eventName,cdnTimerID);
-
-     /*            this.setState(prevState=>
-                    ({
-                    events:  prevState.events.map((obj,index)=>{
-                        console.log((index===i)? {...obj,cdnTimerID:cdnTimerID}:obj);
-                   return  (index===i)? {...obj,cdnTimerID:cdnTimerID}:obj}
-                   )                  
-                  }));  */  
-                  
-                  
+                
                   this.setState(
                     {
                     events:  this.state.events.map((obj,index)=>{
@@ -109,8 +113,7 @@ class Event extends Component {
                    return  (index===i)? {...obj,cdnTimerID:cdnTimerID}:obj}
                    )                  
                   });
-
-                
+               
             }
 
         }
@@ -137,7 +140,6 @@ class Event extends Component {
         let hours= parseInt((this.state.timeCDNSet!=='')?this.state.timeCDNSet.split(':')[0]:'0');
         let mins=parseInt((this.state.timeCDNSet!=='')?this.state.timeCDNSet.split(':')[1]:'0');
 
-       // console.log(year,month,day,hours,mins);
         let countDownDate=new Date(year,month-1,day,hours,mins,0).getTime();
         if((countDownDate-this.state.datetime.getTime())>=0)
         {
@@ -219,11 +221,10 @@ class Event extends Component {
 
 
     render() {
-     //   console.log(this.state);
-       // console.log(this.state.datetime.toLocaleTimeString());
+    //    console.log(this.state);
         return (
             <div>
-                <h2>Today:   {this.state.datetime.toLocaleDateString()} &nbsp;&nbsp;  {this.state.datetime.toLocaleTimeString()}</h2>
+               <Clock datetime={this.datetime}/>
                 <form onSubmit={this.formSubmitHandler}>
                     <div>
                     <label>Event name: <input className="inputs" type="text" name="eventname" value ={this.state?.eventname??''} onChange={this.handleChange} ></input></label>
