@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Clock extends Component {
 
   state={
-    datetime: new Date(),
+    datetime: '',
 }
 
     // Today Date and Time display logic
@@ -26,7 +26,7 @@ class Clock extends Component {
       render() {
         return (
           <div>
-              <h2>Today:   {this.state.datetime.toLocaleDateString()} &nbsp;&nbsp;  {this.state.datetime.toLocaleTimeString()}</h2>
+              <h2>Today:   {this.state?.datetime?.toLocaleDateString?.()} &nbsp;&nbsp;  {this.state?.datetime?.toLocaleTimeString?.()}</h2>
           </div>
         );
       }

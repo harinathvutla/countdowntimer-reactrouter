@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import Clock from "./Clock"; 
+import Form from "./Form";
+import EventsDisplay from './EventsDisplay';
 
 class Event extends Component {
     state={
-  
-        eventname: '',
-        dateCDNSet: '',
-        timeCDNSet: '' ,
         events: [],
         cdnTime: {},
         flagStoredEventsDisplay: 0
@@ -14,7 +12,6 @@ class Event extends Component {
 
     // Today Date and Time display logic
     componentDidMount=()=>{
-        
         this.setState({
             events: JSON.parse(localStorage.getItem('events'))??[]
           },()=>{
@@ -39,16 +36,13 @@ class Event extends Component {
     }
 
     componentDidUpdate=()=>{
-       
         if(this.state?.datetime!==undefined && this.state.flagStoredEventsDisplay===0)
         {
             this.setState({
                 flagStoredEventsDisplay:1
             });
-
             this.loadEvents();
         }
-
     } 
 
     // count down timer logic
@@ -112,8 +106,7 @@ class Event extends Component {
                         console.log({...obj,cdnTimerID:cdnTimerID});
                    return  (index===i)? {...obj,cdnTimerID:cdnTimerID}:obj}
                    )                  
-                  });
-               
+                  });               
             }
 
         }
@@ -130,94 +123,10 @@ class Event extends Component {
      
     }
 
-  // handle submit
-    formSubmitHandler=e=>{
-        e.preventDefault();
- 
-        let year= parseInt(this.state.dateCDNSet.split('-')[0]);
-        let month= parseInt(this.state.dateCDNSet.split('-')[1]);
-        let day= parseInt(this.state.dateCDNSet.split('-')[2]);
-        let hours= parseInt((this.state.timeCDNSet!=='')?this.state.timeCDNSet.split(':')[0]:'0');
-        let mins=parseInt((this.state.timeCDNSet!=='')?this.state.timeCDNSet.split(':')[1]:'0');
 
-        let countDownDate=new Date(year,month-1,day,hours,mins,0).getTime();
-        if((countDownDate-this.state.datetime.getTime())>=0)
-        {
-            if(this.state.eventname!=='')
-            {
-                let temp=this.state.eventname;
-                let cdnTimerID=setInterval(()=>this.countDown(countDownDate,temp),200);
-
-                this.setState({
-                    warnMessage: '',
-                    events: [...this.state?.events, {eventName: this.state.eventname, date :this.state.dateCDNSet,time:this.state?.timeCDNSet??'00', cdnTimerID}],
-                     eventname: '',
-                    dateCDNSet: '',
-                    timeCDNSet: ''  
-                  }, ()=>localStorage.setItem('events',JSON.stringify(this.state.events)));
-               
-            }
-            else
-            {
-                this.setState({
-                    warnMessage: 'Event name cannot be blank!'
-                  });               
-            }
-
-        }
-        else
-        {
-            if(this.state.eventname!=='')
-            {
-                this.setState({
-                    warnMessage: 'Please enter the date and time correctly! '
-                });
-            }
-            else
-            {
-                this.setState({
-                    warnMessage: 'Event name cannot be blank and Please enter the date and time correctly! '
-                });
-            }
-
-        }
-     
+    updateStateFromForm=(events)=>{
+        this.setState({events});
     }
-
-    handleChange=e=>{
-         this.setState({
-            [e.target.name]: e.target.value
-          }); 
-    }
-
-
-    eventsDisplay=()=>{
-      return  this.state?.events?.map(x=>{
-           return( 
-                <div className='cntdwn-wrapper' key={x.eventName}>
-                    <h4>{x?.eventName??''}&nbsp;&nbsp; {x?.date??''}&nbsp;&nbsp; {x?.time===''?'00:00':x.time}</h4>
-                    <div className="cntdwn">
-                        <div>
-                            <h3>Days</h3>
-                            <p>{this.state?.cdnTime[x.eventName]?.cdnDays??'00'}</p>
-                        </div>
-                        <div>
-                            <h3>Hours</h3>
-                            <p>{this.state?.cdnTime[x.eventName]?.cdnHours??'00'}</p>
-                        </div>
-                        <div>
-                            <h3>Minutes</h3>
-                            <p>{this.state?.cdnTime[x.eventName]?.cdnMinutes??'00'}</p>
-                        </div> 
-                        <div>
-                            <h3>Seconds</h3>
-                            <p>{this.state?.cdnTime[x.eventName]?.cdnSeconds??'00'}</p>
-                        </div>                    
-                    </div>
-                    <p className='timer-expired'>{this.state?.cdnTime[x.eventName]?.timediff<0?'Timer Expired':''}</p>
-                </div>);
-        })
-    } 
 
 
     render() {
@@ -225,16 +134,8 @@ class Event extends Component {
         return (
             <div>
                <Clock datetime={this.datetime}/>
-                <form onSubmit={this.formSubmitHandler}>
-                    <div>
-                    <label>Event name: <input className="inputs" type="text" name="eventname" value ={this.state?.eventname??''} onChange={this.handleChange} ></input></label>
-                    <label>Date: <input className="inputs" type="date" name="dateCDNSet" value ={this.state?.dateCDNSet??''} onChange={this.handleChange} ></input> </label>
-                    <label>Time: <input className="inputs" type="time" name="timeCDNSet" value ={this.state?.timeCDNSet??''} onChange={this.handleChange}></input> </label>
-                    </div>
-                    <h4 style={{color:'red'}}>{this.state?.warnMessage??''}</h4>
-                    <input type="submit" value="Start" className="button"/>
-                </form>
-                 {this.eventsDisplay()} 
+                <Form countDown={this.countDown} events={this.state.events} updateStateFromForm={this.updateStateFromForm}/>
+                <EventsDisplay events={this.state?.events} cdnTime={this.state?.cdnTime}/>
             </div>
         );
     }
