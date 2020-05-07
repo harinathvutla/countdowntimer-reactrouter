@@ -58,7 +58,6 @@ class Event extends Component {
             let cdnHours = Math.floor((timediff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             let cdnMinutes = Math.floor((timediff % (1000 * 60 * 60)) / (1000 * 60));
             let cdnSeconds = Math.floor((timediff % (1000 * 60)) / 1000);
-
        //     console.log(cdnDays,cdnHours,cdnMinutes,cdnSeconds);
             this.setState(prevState =>
                 ({

@@ -2,34 +2,27 @@ import React, { Component } from 'react';
 
 class Clock extends Component {
 
-  state={
-    datetime: '',
-}
-
     // Today Date and Time display logic
     componentDidMount=()=>{
-      this.timerID= setInterval(()=>this.setTime(),1000);
+      this.timerID= setInterval(()=>this.setTime(),200);
   }
 
   setTime=()=> {
-    this.setState({
-     datetime: new Date() ,
-   });
-
-   this.props.datetime(this.state.datetime);
- }
+    this.datetime=new Date();
+    this.props.datetime(this.datetime);
+  }
     
  componentWillUnmount() {
   clearInterval(this.timerID);
-}
+  }
 
-      render() {
-        return (
+  render() {
+    return (
           <div>
-              <h2>Today:   {this.state?.datetime?.toLocaleDateString?.()} &nbsp;&nbsp;  {this.state?.datetime?.toLocaleTimeString?.()}</h2>
+              <h2>Today:   {this.datetime?.toLocaleDateString?.()} &nbsp;&nbsp;  {this.datetime?.toLocaleTimeString?.()}</h2>
           </div>
-        );
-      }
+          );
+        }
 }
 
 export default Clock;
