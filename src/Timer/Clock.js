@@ -8,8 +8,7 @@ class Clock extends Component {
   }
 
   setTime=()=> {
-    this.datetime=new Date();
-    this.props.datetime(this.datetime);
+    this.setState({datetime:new Date()});
   }
     
  componentWillUnmount() {
@@ -19,7 +18,7 @@ class Clock extends Component {
   render() {
     return (
           <div>
-              <h2>Today:   {this.datetime?.toLocaleDateString?.()} &nbsp;&nbsp;  {this.datetime?.toLocaleTimeString?.()}</h2>
+              <h2>Today:   {this.state?.datetime?.toLocaleDateString?.()} &nbsp;&nbsp;  {this.state?.datetime?.toLocaleTimeString?.()}</h2>
           </div>
           );
         }

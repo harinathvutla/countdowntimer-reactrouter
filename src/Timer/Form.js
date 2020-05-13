@@ -9,11 +9,11 @@ class Form extends Component {
         events: [],
     }
 
-/*     componentDidMount=()=>{
+     componentDidMount=()=>{
         this.setState({
-            events:this.props.events
+            events:JSON.parse(localStorage.getItem('events'))??[]
         })
-    } */
+    } 
 
     handleChange=e=>{
         this.setState({
@@ -41,13 +41,14 @@ class Form extends Component {
 
                 this.setState({
                     warnMessage: '',
-                    events: [...this.props?.events, {eventName: this.state.eventname, date :this.state.dateCDNSet,time:this.state?.timeCDNSet??'00', cdnTimerID}],
+                    events: [...this.state?.events, {eventName: this.state.eventname, date :this.state.dateCDNSet,time:this.state?.timeCDNSet??'00', cdnTimerID}],
                      eventname: '',
                     dateCDNSet: '',
                     timeCDNSet: ''  
                   }, ()=>{
+                      console.log(this.state.events);
                   localStorage.setItem('events',JSON.stringify(this.state.events));
-                  this.props.updateStateFromForm(this.state.events);
+                  this.props.eventsUpdate(this.state.events);
                   }
                   );
                

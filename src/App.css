@@ -67,6 +67,7 @@ label{
  } 
   
  .cntdwn-wrapper{
+  font-family: 'Saira Stencil One', cursive;
    margin: 50px auto;
    display: flex;
    flex-direction: column;
@@ -99,4 +100,29 @@ label{
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 15px;
+}
+
+.navig{
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+  padding: 8px 15px;
+		text-decoration: none;
+    font-weight: 600;
+    font-size: 20px;
+    margin-top: 20px;
+}
+
+.navig a{
+  background-color: #17a2b8;
+  color: white ;
+  padding: 5px;
+  margin-left: 20px;
+  border-radius: 5px;
+}
+
+.navig a:hover{
+  color: #14899b; 
+  text-decoration: none;
+  background-color: white;
+  border: 1px solid #14899b;
 }
